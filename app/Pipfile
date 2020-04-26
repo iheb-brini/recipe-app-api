@@ -1,0 +1,18 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+pylint = "*"
+
+[packages]
+djangorestframework = ">=3.9.0,<3.10.0"
+flake8 = ">=3.6.0,<3.7.0"
+Django = ">=2.2.10"
+pylint = "==2.4.4"
+pylint-django = "==2.0.15"
+pylint-plugin-utils = "==0.6"
+
+[requires]
+python_version = "3.7"
