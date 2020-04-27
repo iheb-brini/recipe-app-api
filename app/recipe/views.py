@@ -3,14 +3,13 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.exceptions import ValidationError
 
 from core.models import Tag, Ingredient, Recipe
 from recipe import serializers
 
 
-class BaseRecipeAttrViewSet(viewsets.GenericViewSet,
-                            mixins.ListModelMixin,
-                            mixins.CreateModelMixin):
+class BaseRecipeAttrViewSet(viewsets.ModelViewSet):
     """Base viewset for user recipe attributes"""
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
@@ -30,10 +29,12 @@ class BaseRecipeAttrViewSet(viewsets.GenericViewSet,
     def perform_create(self, serializer):
         """Create a new tag"""
 
-        if not self.queryset.filter(
+        if self.queryset.filter(
             name=serializer.validated_data['name']
         ).exists():
-            serializer.save(user=self.request.user)
+            raise ValidationError('Object already exists')
+
+        return serializer.save(user=self.request.user)
 
 
 class TagViewSet(BaseRecipeAttrViewSet):
@@ -91,6 +92,11 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         """Create a new recipe"""
+
+        if self.queryset.filter(
+            name=serializer.validated_data['name']
+        ).exists():
+            raise ValidationError('Recipe already exists')
 
         return serializer.save(user=self.request.user)
 
