@@ -224,7 +224,7 @@ class PrivateRecipeApiTest(TestCase):
         self.assertEqual(recipe.price, payload['price'])
         tags = recipe.tags.all()
         self.assertEqual(tags.count(), 0)
-        
+
     def test_filter_recipes_by_tags(self):
         """Test returning recipes with specific tags"""
 
@@ -248,7 +248,6 @@ class PrivateRecipeApiTest(TestCase):
         self.assertIn(serializer2.data, res.data)
         self.assertNotIn(serializer3.data, res.data)
 
-
     def test_filter_recipes_by_ingredients(self):
         """Test returning recipes with specific ingredients"""
         recipe1 = sample_recipe(user=self.user, title='Posh beans on toast')
@@ -270,6 +269,7 @@ class PrivateRecipeApiTest(TestCase):
         self.assertIn(serializer1.data, res.data)
         self.assertIn(serializer2.data, res.data)
         self.assertNotIn(serializer3.data, res.data)
+
 
 class RecipeImageUploadTests(TestCase):
     """Testing upload image feature"""
@@ -306,5 +306,4 @@ class RecipeImageUploadTests(TestCase):
         url = image_upload_url(self.recipe.id)
         res = self.client.post(url, {'image': 'no image'}, format='multipart')
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
-
 
